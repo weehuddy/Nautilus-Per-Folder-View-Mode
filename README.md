@@ -53,7 +53,7 @@ sudo apt-get build-dep nautilus
 
 apt-get source nautilus
 
-wget https://raw.githubusercontent.com/weehuddy/Nautilus-Per-Folder-View-Mode-Patch/refs/heads/gnome-48/nautilus-restore-folder-view.patch
+wget https://raw.githubusercontent.com/weehuddy/Nautilus-Per-Folder-View-Mode/refs/heads/main/nautilus-restore-folder-view.patch
 
 cd nautilus-48.3
 
