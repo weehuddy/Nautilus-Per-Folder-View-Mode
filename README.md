@@ -23,7 +23,7 @@ tar xf nautilus-48.3.tar.xz
 
 cd nautilus-48.3
 
-wget https://raw.githubusercontent.com/weehuddy/Nautilus-Per-Folder-View-Mode-Patch/refs/heads/gnome-48/nautilus-restore-folder-view.patch
+wget https://raw.githubusercontent.com/weehuddy/Nautilus-Per-Folder-View-Mode/refs/heads/main/nautilus-restore-folder-view.patch
 
 patch -p1 < ./nautilus-restore-folder-view.patch
 
