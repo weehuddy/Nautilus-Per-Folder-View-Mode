@@ -1,7 +1,6 @@
-Binary files nautilus-orig/data/gschemas.compiled and nautilus-test/data/gschemas.compiled differ
-diff -ruN nautilus-orig/data/org.gnome.nautilus.gschema.xml nautilus-test/data/org.gnome.nautilus.gschema.xml
---- nautilus-orig/data/org.gnome.nautilus.gschema.xml	2025-08-18 14:33:09.259953193 +0100
-+++ nautilus-test/data/org.gnome.nautilus.gschema.xml	2025-08-17 20:12:05.751550671 +0100
+diff -ruN nautilus-48.3/data/org.gnome.nautilus.gschema.xml nautilus-48.3-mod/data/org.gnome.nautilus.gschema.xml
+--- nautilus-48.3/data/org.gnome.nautilus.gschema.xml	2025-06-29 21:22:56.000000000 +0100
++++ nautilus-48.3-mod/data/org.gnome.nautilus.gschema.xml	2025-08-18 23:38:58.416374806 +0100
 @@ -77,6 +77,15 @@
    </schema>
  
@@ -18,26 +17,17 @@ diff -ruN nautilus-orig/data/org.gnome.nautilus.gschema.xml nautilus-test/data/o
      <key type="b" name="always-use-location-entry">
        <default>false</default>
        <summary>Always use the location entry, instead of the pathbar</summary>
-diff -ruN nautilus-orig/src/nautilus-list-view.c nautilus-test/src/nautilus-list-view.c
---- nautilus-orig/src/nautilus-list-view.c	2025-08-18 14:33:09.415953191 +0100
-+++ nautilus-test/src/nautilus-list-view.c	2025-08-17 18:31:22.736472361 +0100
-@@ -1264,3 +1264,4 @@
- {
-     return g_object_new (NAUTILUS_TYPE_LIST_VIEW, NULL);
- }
-+
-diff -ruN nautilus-orig/src/nautilus-per-folder-view.h nautilus-test/src/nautilus-per-folder-view.h
---- nautilus-orig/src/nautilus-per-folder-view.h	1970-01-01 01:00:00.000000000 +0100
-+++ nautilus-test/src/nautilus-per-folder-view.h	2025-08-18 13:43:37.538930204 +0100
-@@ -0,0 +1,66 @@
+diff -ruN nautilus-48.3/src/nautilus-per-folder-view.h nautilus-48.3-mod/src/nautilus-per-folder-view.h
+--- nautilus-48.3/src/nautilus-per-folder-view.h	1970-01-01 01:00:00.000000000 +0100
++++ nautilus-48.3-mod/src/nautilus-per-folder-view.h	2025-08-18 23:43:57.332909450 +0100
+@@ -0,0 +1,64 @@
 +#pragma once
 +#include <gio/gio.h>
 +
-+/* Key name in org.gnome.nautilus.preferences */
 +#define PFV_SCHEMA "org.gnome.nautilus.preferences"
 +#define PFV_KEY    "per-folder-view-modes"
 +
-+/* Returns newly-allocated string ("list","grid","icon") or NULL */
++
 +static inline char *
 +pfv_get_mode_for_uri (const char *uri)
 +{
@@ -59,12 +49,11 @@ diff -ruN nautilus-orig/src/nautilus-per-folder-view.h nautilus-test/src/nautilu
 +
 +    g_variant_unref (dict);
 +    g_object_unref (s);
-+    //g_message ("pfv_get_mode_for_uri Restore mode for URI: %s", result);
 +    return result;
 +
 +}
 +
-+/* Set/update mapping: uri -> mode ("list","grid","icon") */
++/* Set/update mapping: uri -> mode ("list","grid") */
 +static inline void
 +pfv_set_mode_for_uri (const char *uri, const char *mode)
 +{
@@ -96,9 +85,9 @@ diff -ruN nautilus-orig/src/nautilus-per-folder-view.h nautilus-test/src/nautilu
 +
 +}
 +
-diff -ruN nautilus-orig/src/nautilus-window.c nautilus-test/src/nautilus-window.c
---- nautilus-orig/src/nautilus-window.c	2025-08-18 14:33:09.427953191 +0100
-+++ nautilus-test/src/nautilus-window.c	2025-08-18 14:24:31.843962418 +0100
+diff -ruN nautilus-48.3/src/nautilus-window.c nautilus-48.3-mod/src/nautilus-window.c
+--- nautilus-48.3/src/nautilus-window.c	2025-06-29 21:22:56.000000000 +0100
++++ nautilus-48.3-mod/src/nautilus-window.c	2025-08-18 23:49:24.729002832 +0100
 @@ -61,6 +61,7 @@
  #include "nautilus-trash-monitor.h"
  #include "nautilus-ui-utilities.h"
@@ -139,15 +128,7 @@ diff -ruN nautilus-orig/src/nautilus-window.c nautilus-test/src/nautilus-window.
      }
  }
  
-@@ -432,6 +453,7 @@
-     g_signal_connect (slot, "notify::title", G_CALLBACK (on_update_page_tooltip), page);
- }
- 
-+
- void
- nautilus_window_open_location_full (NautilusWindow     *window,
-                                     GFile              *location,
-@@ -469,6 +491,21 @@
+@@ -469,6 +490,21 @@
      }
  
      nautilus_window_slot_open_location_full (target_slot, location, flags, selection);
@@ -169,7 +150,7 @@ diff -ruN nautilus-orig/src/nautilus-window.c nautilus-test/src/nautilus-window.
  }
  
  static gboolean
-@@ -511,6 +548,27 @@
+@@ -511,6 +547,23 @@
      current_slot = NAUTILUS_WINDOW_SLOT (adw_tab_page_get_child (page));
      location = nautilus_window_slot_get_location (current_slot);
  
@@ -177,11 +158,7 @@ diff -ruN nautilus-orig/src/nautilus-window.c nautilus-test/src/nautilus-window.
 +    char *mode = pfv_get_mode_for_uri (uri);
 +
 +    if (mode) {
-+        /* Prefer using existing window actions to switch views.
-+         * Action names can vary. Common patterns:
-+         *   "win.use-list-view", "win.use-grid-view", "win.use-icon-view"
-+         * Discover with: grep -R "use-.*-view" src/
-+         */
++
 +        if (g_strcmp0 (mode, "list") == 0) {
 +            gtk_widget_activate_action (GTK_WIDGET (window), "win.use-list-view", NULL);
 +        } else if (g_strcmp0 (mode, "grid") == 0) {
@@ -197,19 +174,18 @@ diff -ruN nautilus-orig/src/nautilus-window.c nautilus-test/src/nautilus-window.
      if (location != NULL)
      {
          if (g_file_has_uri_scheme (location, SCHEME_SEARCH))
-diff -ruN nautilus-orig/src/nautilus-window-slot.c nautilus-test/src/nautilus-window-slot.c
---- nautilus-orig/src/nautilus-window-slot.c	2025-08-18 14:33:09.427953191 +0100
-+++ nautilus-test/src/nautilus-window-slot.c	2025-08-18 14:17:33.155976797 +0100
-@@ -48,7 +48,7 @@
+diff -ruN nautilus-48.3/src/nautilus-window-slot.c nautilus-48.3-mod/src/nautilus-window-slot.c
+--- nautilus-48.3/src/nautilus-window-slot.c	2025-06-29 21:22:56.000000000 +0100
++++ nautilus-48.3-mod/src/nautilus-window-slot.c	2025-08-18 23:52:54.906737958 +0100
+@@ -48,6 +48,7 @@
  #include "nautilus-module.h"
  #include "nautilus-monitor.h"
  #include "nautilus-ui-utilities.h"
--
 +#include "nautilus-per-folder-view.h"
+ 
  enum
  {
-     PROP_ACTIVE = 1,
-@@ -1124,7 +1124,7 @@
+@@ -1124,7 +1125,7 @@
      }
  }
  
@@ -218,7 +194,7 @@ diff -ruN nautilus-orig/src/nautilus-window-slot.c nautilus-test/src/nautilus-wi
  change_files_view_mode (NautilusWindowSlot *self,
                          guint               view_id)
  {
-@@ -1134,6 +1134,14 @@
+@@ -1134,6 +1135,14 @@
      self->view_id = view_id;
      nautilus_window_slot_set_view_id (self, view_id);
      g_settings_set_enum (nautilus_preferences, NAUTILUS_PREFERENCES_DEFAULT_FOLDER_VIEWER, view_id);
@@ -233,9 +209,9 @@ diff -ruN nautilus-orig/src/nautilus-window-slot.c nautilus-test/src/nautilus-wi
  }
  
  static void
-diff -ruN nautilus-orig/src/nautilus-window-slot.h nautilus-test/src/nautilus-window-slot.h
---- nautilus-orig/src/nautilus-window-slot.h	2025-08-18 14:33:09.427953191 +0100
-+++ nautilus-test/src/nautilus-window-slot.h	2025-08-18 14:17:12.031977076 +0100
+diff -ruN nautilus-48.3/src/nautilus-window-slot.h nautilus-48.3-mod/src/nautilus-window-slot.h
+--- nautilus-48.3/src/nautilus-window-slot.h	2025-06-29 21:22:56.000000000 +0100
++++ nautilus-48.3-mod/src/nautilus-window-slot.h	2025-08-18 23:38:58.420374812 +0100
 @@ -122,3 +122,5 @@
                                                              guint               distance);
  
