@@ -18,8 +18,8 @@ If you prefer certain folders (e.g. ~/Pictures) in Grid view and others (e.g. ~/
 wget https://download.gnome.org/sources/nautilus/48/nautilus-48.3.tar.xz \
 tar xf nautilus-48.3.tar.xz \
 cd nautilus-48.3 \
-wget https://raw.githubusercontent.com/weehuddy/Nautilus-Per-Folder-View-Mode/refs/heads/main/nautilus-restore-folder-view.patch \
-patch -p1 < ./nautilus-restore-folder-view.patch \
+wget https://raw.githubusercontent.com/weehuddy/Nautilus-Per-Folder-View-Mode/refs/heads/main/nautilus-restore-folder-icons-view.patch \
+patch -p1 < ./nautilus-restore-folder-icons-view.patch \
 sudo cp ./data/org.gnome.nautilus.gschema.xml /usr/share/glib-2.0/schemas/ \
 sudo glib-compile-schemas /usr/share/glib-2.0/schemas \
 mkdir build && cd build
@@ -37,9 +37,9 @@ sudo ninja install
 # Build from Debain Source ###
 sudo apt-get build-dep nautilus \
 apt-get source nautilus \
-wget https://raw.githubusercontent.com/weehuddy/Nautilus-Per-Folder-View-Mode/refs/heads/main/nautilus-restore-folder-view.patch \
+wget https://raw.githubusercontent.com/weehuddy/Nautilus-Per-Folder-View-Mode/refs/heads/main/nautilus-restore-folder-icons-view.patch \
 cd nautilus-48.3 \
-patch -p1 < ../nautilus-restore-folder-view.patch \
+patch -p1 < ../nautilus-restore-folder-icons-view.patch \
 dpkg-source --commit \
 DEB_BUILD_OPTIONS=nocheck dpkg-buildpackage -us -uc \
 nautilus -q \
