@@ -43,7 +43,7 @@ patch -p1 < ../nautilus-restore-folder-icons-view.patch \
 dpkg-source --commit \
 DEB_BUILD_OPTIONS=nocheck dpkg-buildpackage -us -uc \
 nautilus -q \
-sudo dpkg -i ./nautilus-data_48.3-2_all.deb ./nautilus_48.3-2_amd64.deb \
+sudo dpkg -i ../nautilus-data_48.3-2_all.deb ../nautilus_48.3-2_amd64.deb \
 sudo apt-mark hold nautilus nautilus-data 
 
 ### Check folders saving 
