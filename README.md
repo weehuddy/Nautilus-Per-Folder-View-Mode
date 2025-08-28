@@ -14,6 +14,14 @@ Works seamlessly with existing Nautilus functionality — no new UI, just smarte
 Upstream Nautilus only lets you set a global default view mode. \
 If you prefer certain folders (e.g. ~/Pictures) in Grid view and others (e.g. ~/Documents) in List view, you need to toggle manually each time.
 
+# Build from Github ###
+git clone https://github.com/GNOME/nautilus.git \
+cd nautilus \
+git checkout origin/gnome-48 -b gnome-48 \
+wget https://raw.githubusercontent.com/weehuddy/Nautilus-Per-Folder-View-Mode/refs/heads/main/nautilus-restore-folder-icons-view.patch \
+patch -p1 < ./nautilus-restore-folder-icons-view.patch \
+mkdir build && cd build
+
 # Build from Source 
 wget https://download.gnome.org/sources/nautilus/48/nautilus-48.3.tar.xz \
 tar xf nautilus-48.3.tar.xz \
@@ -45,6 +53,13 @@ DEB_BUILD_OPTIONS=nocheck dpkg-buildpackage -us -uc \
 nautilus -q \
 sudo dpkg -i ../nautilus-data_48.3-2_all.deb ../nautilus_48.3-2_amd64.deb \
 sudo apt-mark hold nautilus nautilus-data 
+
+# Build from Github ###
+git clone https://github.com/GNOME/nautilus.git \
+cd nautilus \
+git checkout origin/gnome-48 -b gnome-48 \
+wget https://raw.githubusercontent.com/weehuddy/Nautilus-Per-Folder-View-Mode/refs/heads/main/nautilus-restore-folder-icons-view.patch \
+patch -p1 < ./nautilus-restore-folder-icons-view.patch\
 
 ### Check folders saving 
 gsettings get org.gnome.nautilus.preferences per-folder-zoom \
