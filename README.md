@@ -54,13 +54,6 @@ nautilus -q \
 sudo dpkg -i ../nautilus-data_48.3-2_all.deb ../nautilus_48.3-2_amd64.deb \
 sudo apt-mark hold nautilus nautilus-data 
 
-# Build from Github ###
-git clone https://github.com/GNOME/nautilus.git \
-cd nautilus \
-git checkout origin/gnome-48 -b gnome-48 \
-wget https://raw.githubusercontent.com/weehuddy/Nautilus-Per-Folder-View-Mode/refs/heads/main/nautilus-restore-folder-icons-view.patch \
-patch -p1 < ./nautilus-restore-folder-icons-view.patch\
-
 ### Check folders saving 
 gsettings get org.gnome.nautilus.preferences per-folder-zoom \
 gsettings get org.gnome.nautilus.preferences per-folder-view-modes
